@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/IgnaciopalizaCode/Peliculas_backend.git"
+    "url": "git+https://github.com/KatuGT/Proyecto-Final-BackEnd"
   },
   "keywords": [
     "fullstack",
@@ -20,9 +20,9 @@
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/IgnaciopalizaCode/Peliculas_backend/issues"
+    "url": "https://github.com/KatuGT/Proyecto-Final-BackEnd/issues"
   },
-  "homepage": "https://github.com/IgnaciopalizaCode/Peliculas_backend#readme",
+  "homepage": "https://github.com/KatuGT/Proyecto-Final-BackEnd#readme",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",

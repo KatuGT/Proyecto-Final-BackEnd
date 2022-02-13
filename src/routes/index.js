@@ -2,20 +2,20 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const database = require("./database.js");
-const dotenv = require("dotenv");
-const peliculaRoute = require("./Peliculas");
-const listaPeliculaRoute = require("./ListaPeliculas");
+const  mongoose  = require('mongoose');
 
-dotenv.config();
+const filmsRoute = require("./Films");
+const listafilmsRoute = require("./ListaFilms");
+
 
 //middlewares
 app.use(cors());
 app.use(express.json());
-app.use("/api/peliculas", peliculaRoute);
-app.use("/api/listapeliculas", listaPeliculaRoute);
+app.use("/api/films", filmsRoute);
+app.use("/api/listafilms", listafilmsRoute);
 
 console.log("ejecutado en index js");
-app.listen(process.env.PORT || 8800, () => {
+app.listen( 8800, () => {
   console.log(`ejecutando servidor en puerto ${process.env.PORT}`);
 });
 app.get("/", (req, res) => {

@@ -1,13 +1,15 @@
 const router = require("express").Router();
 const ListaPeliculas = require("../models/ListaPeliculas.js");
+const ListaFilms = require("../models/ListasFilms.js");
+
 
 //CREAR
 router.post("/", async (req, res) => {
   const {nombre, genero, tipo} = req.body
-  const nuevaListaPeliculas = new ListaPeliculas({nombre, genero, tipo});
+  const nuevaListaFilms = new ListaFilms({nombre, genero, tipo});
   try {
-    const listaPeliculaGuardada = await nuevaListaPeliculas.save();
-    res.status(201).json(listaPeliculaGuardada);
+    const listaFilmsGuardada = await nuevaListaPeliculas.save();
+    res.status(201).json(listaFilmsGuardada);
   } catch (err) {
     res.status(500).json(err);
   }
@@ -16,8 +18,8 @@ router.post("/", async (req, res) => {
 //BORRAR
 router.delete("/:id", async (req, res) => {
   try {
-    await ListaPeliculas.findByIdAndDelete(req.params.id);
-    const listaBorrar = await ListaPeliculas.find();
+    await ListaFilms.findByIdAndDelete(req.params.id);
+    const listaBorrar = await ListaFilms.find();
 
     res.status(200).json({ mensaje: "La pelicula fue borrada", listaBorrar });
   } catch (err) {
@@ -28,8 +30,8 @@ router.delete("/:id", async (req, res) => {
 //OBTENER TODAS
 router.get("/", async (req, res) => {
   try {
-    const listaPeliculas = await ListaPeliculas.find();
-    res.status(200).json(listaPeliculas.reverse());
+    const listaFilms = await ListaFilms.find();
+    res.status(200).json(listaFilms.reverse());
   } catch (err) {
     res.status(500).json(err);
   }
@@ -38,7 +40,7 @@ router.get("/", async (req, res) => {
 //OBTENER SEGUN ID
 router.get("/find/:id", async (req, res) => {
   try {
-    const lista = await ListaPeliculas.findById(req.params.id);
+    const lista = await ListaFilms.findById(req.params.id);
     res.status(200).json(lista);
   } catch (err) {
     res.status(500).json(err);
@@ -53,18 +55,18 @@ router.get("/filterList", async (req, res) => {
   try {
     if (tipoQuery) {
       if (generoQuery) {
-        lista = await ListaPeliculas.aggregate([
+        lista = await ListaFilms.aggregate([
           { $sample: { size: 10 } },
           { $match: { tipo: tipoQuery, genero: generoQuery } },
         ]);
       } else {
-        lista = await ListaPeliculas.aggregate([
+        lista = await ListaFilms.aggregate([
           { $sample: { size: 10 } },
           { $match: { tipo: tipoQuery } },
         ]);
       }
     } else {
-      lista = await ListaPeliculas.aggregate([{ $sample: { size: 10 } }]);
+      lista = await ListaFilms.aggregate([{ $sample: { size: 10 } }]);
     }
     res.status(200).json(lista);
   } catch (err) {
@@ -75,12 +77,12 @@ router.get("/filterList", async (req, res) => {
 //MODIFICAR
 router.put("/find/:id", async (req, res) => {
   try {
-    const listaPeliculasMdificada = await ListaPeliculas.findByIdAndUpdate(
+    const listaFilmsMdificada = await ListaFilms.findByIdAndUpdate(
       req.params.id,
       { $set: req.body },
       { new: true }
     );
-    res.status(200).json(listaPeliculasMdificada);
+    res.status(200).json(listaFilmsMdificada);
   } catch (err) {
     res.status(500).json(err);
   }
@@ -90,11 +92,11 @@ router.put("/find/:id", async (req, res) => {
 router.post("/:idlista/agregarfilm/:idFilm", async (req, res) => {
   try {
     const idFilm = req.params.idFilm;
-    const listaPeliculas = await ListaPeliculas.findById(req.params.idlista);
-    listaPeliculas.contenido.push(idFilm);
+    const listaFilms = await ListaFilms.findById(req.params.idlista);
+    listaFilms.contenido.push(idFilm);
 
-    await listaPeliculas.save();
-    res.status(200).json(listaPeliculas);
+    await listaFilms.save();
+    res.status(200).json(listaFilms);
   } catch (err) {
     res.status(500).json(err);
   }
@@ -105,7 +107,7 @@ router.delete("/:idLista/borrarfilm/:idFilm", async (req, res) => {
   try {
     const idFilm = req.params.idFilm;
     const idLista = req.params.idLista;
-    const actualizado = await ListaPeliculas.findByIdAndUpdate(
+    const actualizado = await ListaFilms.findByIdAndUpdate(
       idLista,
       { $pullAll: { contenido: [idFilm] } },
       { new: true }

@@ -1,14 +1,14 @@
 const router = require("express").Router();
-const Pelicula = require("../models/Pelicula");
-const ListaPeliculas = require("../models/ListaPeliculas");
+const Films = require("../models/Films");
+const ListaFilms = require("../models/ListasFilms");
 
 //CREAR
 router.post("/", async (req, res) => {
-  const nuevaPelicula = new Pelicula(req.body);
-  nuevaPelicula.genero = nuevaPelicula.genero.toLowerCase();
+  const nuevoFilm = new Films(req.body);
+  nuevoFilm.genero = nuevoFilm.genero.toLowerCase();
   try {
-    const peliculaGuardada = await nuevaPelicula.save();
-    res.status(201).json(peliculaGuardada);
+    const filmGuardado = await nuevoFilm.save();
+    res.status(201).json(filmGuardado);
   } catch (err) {
     res.status(500).json(err);
   }
@@ -17,12 +17,12 @@ router.post("/", async (req, res) => {
 //MODIFICAR
 router.put("/:id", async (req, res) => {
   try {
-    const peliculaModificada = await Pelicula.findByIdAndUpdate(
+    const filmModificado = await Films.findByIdAndUpdate(
       req.params.id,
       { $set: req.body },
       { new: true }
     );
-    res.status(200).json(peliculaModificada);
+    res.status(200).json(filmModificado);
   } catch (err) {
     res.status(500).json(err);
   }
@@ -31,13 +31,12 @@ router.put("/:id", async (req, res) => {
 //BORRAR
 router.delete("/:id", async (req, res) => {
   try {
-    await Pelicula.findByIdAndDelete(req.params.id);
-    const listas = await ListaPeliculas.find({ contenido: req.params.id });
+    await Films.findByIdAndDelete(req.params.id);
+    const listas = await ListaFilms.find({ contenido: req.params.id });
     for (const lista of listas) {
       lista.contenido = lista.contenido.filter(
         (elemento) => elemento !== req.params.id
       );
-      console.log(lista.contenido);
       await lista.save();
     }
     res.status(200).json("La pelicula fue borrada");
@@ -49,8 +48,8 @@ router.delete("/:id", async (req, res) => {
 //OBTENER TODAS
 router.get("/", async (req, res) => {
   try {
-    const peliculas = await Pelicula.find();
-    res.status(200).json(peliculas.reverse());
+    const films = await Films.find();
+    res.status(200).json(films.reverse());
   } catch (err) {
     res.status(500).json(err);
   }
@@ -59,30 +58,30 @@ router.get("/", async (req, res) => {
 //OBTENER SEGUN ID
 router.get("/:id", async (req, res) => {
   try {
-    const pelicula = await Pelicula.findById(req.params.id);
-    res.status(200).json(pelicula);
+    const films = await Films.findById(req.params.id);
+    res.status(200).json(films);
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
 //OBTENER RANDOM
-router.get("/random", async (req, res) => {
+router.get("/random/seven", async (req, res) => {
   const tipo = req.query.type;
-  let pelicula;
+  let film;
   try {
     if (tipo === "series") {
-      movie = await Pelicula.aggregate([
+      movie = await Films.aggregate([
         { $match: { esPelicula: false } },
         { $sample: { size: 7 } },
       ]);
     } else {
-      pelicula = await Pelicula.aggregate([
+      film = await Films.aggregate([
         { $match: { isSeries: true } },
         { $sample: { size: 7 } },
       ]);
     }
-    res.status(200).json(pelicula);
+    res.status(200).json(film);
   } catch (err) {
     res.status(500).json(err);
   }
@@ -93,11 +92,11 @@ router.get("/filtro/:tipo/:genero", async (req, res) => {
   try {
     const tipo = req.params.tipo.toLowerCase() === "pelicula";
     const busquedaGenero = req.params.genero.toLowerCase();
-    const peliculaFiltrada = await Pelicula.find({
+    const filmFiltrado = await Films.find({
       esPelicula: tipo,
       genero: busquedaGenero,
     });
-    res.status(200).json(peliculaFiltrada);
+    res.status(200).json(filmFiltrado);
   } catch (err) {
     res.status(500).json(err);
   }
