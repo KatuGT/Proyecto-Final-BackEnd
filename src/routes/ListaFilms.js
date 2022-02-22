@@ -8,7 +8,7 @@ router.post("/", async (req, res) => {
   const {nombre, genero, tipo} = req.body
   const nuevaListaFilms = new ListaFilms({nombre, genero, tipo});
   try {
-    const listaFilmsGuardada = await nuevaListaPeliculas.save();
+    const listaFilmsGuardada = await nuevaListaFilms.save();
     res.status(201).json(listaFilmsGuardada);
   } catch (err) {
     res.status(500).json(err);
