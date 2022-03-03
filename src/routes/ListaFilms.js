@@ -1,5 +1,4 @@
 const router = require("express").Router();
-const ListaPeliculas = require("../models/ListaPeliculas.js");
 const ListaFilms = require("../models/ListasFilms.js");
 
 
