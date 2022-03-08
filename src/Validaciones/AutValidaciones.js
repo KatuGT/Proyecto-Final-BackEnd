@@ -56,5 +56,7 @@ exports.autValidaciones = [
     .not()
     .isEmpty()
     .withMessage("Ingresa una contraseña.")
-    .isLength({ min: 8 }),
+    .isLength({ min: 8 })
+    .matches(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/)
+    .withMessage("La contrasña no cumple con los requisitos."),
 ];
