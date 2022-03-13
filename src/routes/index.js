@@ -9,17 +9,14 @@ const listafilmsRoute = require("./ListaFilms");
 const autenticacionRoute = require("./Autenticacion");
 const usuariosRoute = require("./Usuarios");
 
-const {
-  autValidaciones,
-  userValidationResult,
-} = require("../Validaciones/AutValidaciones");
+
 
 //middlewares
 app.use(cors());
 app.use(express.json());
 app.use("/api/films", filmsRoute);
 app.use("/api/listafilms", listafilmsRoute);
-app.use("/api/aut", autValidaciones, userValidationResult, autenticacionRoute);
+app.use("/api/aut", autenticacionRoute);
 app.use("/api/usuario", usuariosRoute);
 
 console.log("ejecutado en index js");

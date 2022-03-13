@@ -10,7 +10,7 @@ exports.userValidationResult = (req, res, next) => {
   next();
 };
 
-exports.autValidaciones = [
+exports.registroValidaciones = [
   check("username")
     .trim()
     .not()
@@ -45,7 +45,7 @@ exports.autValidaciones = [
               reject(new Error('Server Error'))
             }
             if(Boolean(user)) {
-              reject(new Error('Este e-mail ya esta en uso.'))
+              reject(new Error('Este e-mail ya esta en uso.'))   
             }
             resolve(true)
           });
