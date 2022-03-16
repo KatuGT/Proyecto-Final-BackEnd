@@ -47,8 +47,8 @@ router.post(
         usuario.password,
         process.env.SECRET_KEY
       );
-      const contraeniaOriginal = bytes.toString(CryptoJS.enc.Utf8);
-      contraeniaOriginal !== req.body.password &&
+      const contraseniaOriginal = bytes.toString(CryptoJS.enc.Utf8);
+      contraseniaOriginal !== req.body.password &&
         res.status(402).json("Contraseña o email erroneo");
 
       const tokenDeAcceso = jwt.sign(

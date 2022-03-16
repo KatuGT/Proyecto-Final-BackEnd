@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-function  verificacion(req, res, next){
+function  verificacionToken(req, res, next){
 const autHeaders = req.headers.token
 if(autHeaders){   
     jwt.verify(autHeaders, process.env.SECRET_KEY, (err, usuario)=>{
@@ -13,4 +13,4 @@ if(autHeaders){
 }
 }
 
-module.exports = verificacion
+module.exports = verificacionToken

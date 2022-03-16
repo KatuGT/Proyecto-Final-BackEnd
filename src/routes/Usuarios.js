@@ -1,9 +1,9 @@
 const router = require("express").Router();
 const Usuario = require("../models/Usuario");
 const CryptoJS = require("crypto-js");
-const verificacion = require("./Token");
+const verificacionToken = require("./Token");
 //UPDATE
-router.put("/:id", verificacion, async (req, res) => {
+router.put("/:id", verificacionToken, async (req, res) => {
   if (req.usuario.id === req.params.id || req.usuario.esAdmin) {
     if (req.body.password) {
       req.body.password = CryptoJS.AES.encrypt(
@@ -27,21 +27,9 @@ router.put("/:id", verificacion, async (req, res) => {
     res.status(403).json("Solo puede modificar tu cuenta");
   }
 });
-//BORRAR
-router.delete("/:id", verificacion, async (req, res) => {
-  if (req.usuario.id === req.params.id || req.usuario.esAdmin) {
-    try {
-      await Usuario.findByIdAndDelete(req.params.id);
-      res.status(200).json("El usuaario fue borrado");
-    } catch (err) {
-      res.status(500).json(err);
-    }
-  } else {
-    res.status(403).json("Solo puede modificar tu cuenta");
-  }
-});
+
 //OBTENER TODOS
-router.get("/", verificacion, async (req, res) => {
+router.get("/", verificacionToken, async (req, res) => {
   const query = req.query.new;
   if (req.usuario.esAdmin) {
     try {
@@ -57,16 +45,31 @@ router.get("/", verificacion, async (req, res) => {
   }
 });
 
-//OBTENER 
+//OBTENER
 router.get("/find/:id", async (req, res) => {
-    
-      try {
-       const usuario = await Usuario.findById(req.params.id)
-       const {password, ...info} = usuario._doc
-        res.status(200).json(info);
-      } catch (err) {
-        res.status(500).json(err);
-      }    
-  });
+  try {
+    const usuario = await Usuario.findById(req.params.id);
+    const { password, ...info } = usuario._doc;
+    res.status(200).json(info);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+//BORRAR
+router.delete("/delete/:id", verificacionToken, async (req, res) => {
+  if (req.usuario.id === req.params.id || req.usuario.esAdmin) {
+    try {
+      console.log(req.usuario.esAdmin)
+      console.log(req.params._id);
+      await Usuario.findByIdAndDelete(req.params.id);
+      res.status(200).json("El usuario fue borrado");
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  } else {
+    res.status(403).json("Solo puede borrar tu cuenta");
+  }
+});
 
 module.exports = router;
