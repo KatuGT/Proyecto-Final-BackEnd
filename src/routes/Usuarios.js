@@ -36,7 +36,7 @@ router.get("/", verificacionToken, async (req, res) => {
       const usuario = query
         ? await Usuario.find().limit(20)
         : await Usuario.find();
-      res.status(200).json(usuario);
+      res.status(200).json(usuario.reverse());
     } catch (err) {
       res.status(500).json(err);
     }
@@ -60,8 +60,7 @@ router.get("/find/:id", async (req, res) => {
 router.delete("/delete/:id", verificacionToken, async (req, res) => {
   if (req.usuario.id === req.params.id || req.usuario.esAdmin) {
     try {
-      console.log(req.usuario.esAdmin)
-      console.log(req.params._id);
+      
       await Usuario.findByIdAndDelete(req.params.id);
       res.status(200).json("El usuario fue borrado");
     } catch (err) {
