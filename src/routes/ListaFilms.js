@@ -87,7 +87,7 @@ router.put("/find/:id", async (req, res) => {
   }
 });
 
-//agregar
+//agregar film a lista 
 router.post("/:idlista/agregarfilm/:idFilm", async (req, res) => {
   try {
     const idFilm = req.params.idFilm;

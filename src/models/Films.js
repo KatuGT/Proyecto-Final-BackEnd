@@ -15,7 +15,7 @@ const filmsSchema = mongoose.Schema({
   publicado: { type: Boolean },
   esPelicula: { type: Boolean, default: true },
   destacada: { type: Boolean, default: false },
-  vista: { type: Boolean, default: false },
+  comentarios:{type: [String], default:[]}
 });
 const Films = mongoose.model("Films", filmsSchema);
 module.exports = Films;

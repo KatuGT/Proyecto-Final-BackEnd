@@ -102,4 +102,20 @@ router.get("/filtro/:tipo/:genero", async (req, res) => {
   }
 });
 
+
+//agregar comentario
+router.post("/:idfilm/agregarcomentario", async (req, res) => {
+  try {
+    const value = req.body.value;
+    const comentarioFilms = await Films.findById(req.params.idfilm);
+    comentarioFilms.comentarios.push(value);
+
+    await comentarioFilms.save();
+    res.status(200).json(comentarioFilms);
+  } catch (err) {
+    res.status(500).json(err);
+    console.log("fallo comentario");
+  }
+});
+
 module.exports = router;
