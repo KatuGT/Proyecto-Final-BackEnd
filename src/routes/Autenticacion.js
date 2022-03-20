@@ -41,15 +41,19 @@ router.post(
   async (req, res) => {
     try {
       const usuario = await Usuario.findOne({ email: req.body.email });
-      !usuario && res.status(401).json("Contraseña o email erroneo");
+
+      if (!usuario) {
+       return res.status(401).json("Contraseña o email erroneo");
+      }
 
       const bytes = CryptoJS.AES.decrypt(
         usuario.password,
         process.env.SECRET_KEY
       );
       const contraseniaOriginal = bytes.toString(CryptoJS.enc.Utf8);
-      contraseniaOriginal !== req.body.password &&
-        res.status(402).json("Contraseña o email erroneo");
+      if (contraseniaOriginal !== req.body.password) {
+       return res.status(402).json("Contraseña o email erroneo");
+      }
 
       const tokenDeAcceso = jwt.sign(
         {
