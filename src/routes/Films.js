@@ -106,10 +106,10 @@ router.get("/filtro/:tipo/:genero", async (req, res) => {
 //agregar comentario
 router.post("/:idfilm/agregarcomentario", async (req, res) => {
   try {
-    const value = req.body.value;
+    console.log(req.body.datosComentarios);
+    const value = req.body.datosComentarios;
     const comentarioFilms = await Films.findById(req.params.idfilm);
     comentarioFilms.comentarios.push(value);
-
     await comentarioFilms.save();
     res.status(200).json(comentarioFilms);
   } catch (err) {
