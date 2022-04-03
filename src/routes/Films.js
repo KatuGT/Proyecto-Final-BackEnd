@@ -97,24 +97,44 @@ router.get("/filtro/:tipo/:genero", async (req, res) => {
       genero: busquedaGenero,
     });
     res.status(200).json(filmFiltrado);
-  } catch (err) {
-    res.status(500).json(err);
+  } catch (error) {
+    res.status(500).json(error);
   }
 });
-
 
 //agregar comentario
 router.post("/:idfilm/agregarcomentario", async (req, res) => {
   try {
-    console.log(req.body.datosComentarios);
     const value = req.body.datosComentarios;
     const comentarioFilms = await Films.findById(req.params.idfilm);
     comentarioFilms.comentarios.push(value);
     await comentarioFilms.save();
     res.status(200).json(comentarioFilms);
-  } catch (err) {
-    res.status(500).json(err);
-    console.log("fallo comentario");
+  } catch (error) {
+    res.status(500).json(error);
+    console.log("fallo agergar comentario");
+  }
+});
+
+router.delete("/:idfilm/borrarcomentario/", async (req, res) => {
+  try {
+    const idfilm = req.params.idfilm;
+    const indexComent = req.body.index;
+    const filmComentarios = await Films.findById(idfilm);
+    const nuevoArrayComentarios = filmComentarios.comentarios.filter(
+      (coment, index) => index !== parseInt(indexComent)
+    );
+    await Films.updateOne(
+      { _id: `${idfilm}` },
+      {
+        $set: { comentarios: nuevoArrayComentarios },
+      }
+    );
+
+    res.status(200).json(nuevoArrayComentarios);
+  } catch (error) {
+    res.status(500).json(error);
+    console.log("fallo borrar comentario");
   }
 });
 
