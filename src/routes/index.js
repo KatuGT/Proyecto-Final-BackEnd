@@ -20,7 +20,7 @@ app.use("/api/aut", autenticacionRoute);
 app.use("/api/usuario", usuariosRoute);
 
 console.log("ejecutado en index js");
-app.listen(8800, () => {
+app.listen(process.env.PORT || 8800, () => {
   console.log(`ejecutando servidor en puerto ${process.env.PORT}`);
 });
 app.get("/", (req, res) => {
