@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const Films = require("../models/Films");
 const ListaFilms = require("../models/ListasFilms");
+const verificacionToken = require("./Token");
 
 //CREAR
 router.post("/", async (req, res) => {
@@ -116,26 +117,29 @@ router.post("/:idfilm/agregarcomentario", async (req, res) => {
   }
 });
 
-router.delete("/:idfilm/borrarcomentario/", async (req, res) => {
-  try {
-    const idfilm = req.params.idfilm;
-    const indexComent = req.body.index;
-    const filmComentarios = await Films.findById(idfilm);
-    const nuevoArrayComentarios = filmComentarios.comentarios.filter(
-      (coment, index) => index !== parseInt(indexComent)
-    );
-    await Films.updateOne(
-      { _id: `${idfilm}` },
-      {
-        $set: { comentarios: nuevoArrayComentarios },
-      }
-    );
+router.delete(
+  "/:idfilm/borrarcomentario/",  
+  async (req, res) => {
+    try {
+      const idfilm = req.params.idfilm;
+      const indexComent = req.body.index;
+      const filmComentarios = await Films.findById(idfilm);
+      const nuevoArrayComentarios = filmComentarios.comentarios.filter(
+        (coment, index) => index !== parseInt(indexComent)
+      );
+      await Films.updateOne(
+        { _id: `${idfilm}` },
+        {
+          $set: { comentarios: nuevoArrayComentarios },
+        }
+      );
 
-    res.status(200).json(nuevoArrayComentarios);
-  } catch (error) {
-    res.status(500).json(error);
-    console.log("fallo borrar comentario");
+      res.status(200).json(nuevoArrayComentarios);
+    } catch (error) {
+      res.status(500).json(error);
+      console.log("fallo borrar comentario");
+    }
   }
-});
+);
 
 module.exports = router;
