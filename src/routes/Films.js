@@ -22,7 +22,7 @@ router.post("/", filmsValidaciones, filmsValidationResult, async (req, res) => {
 });
 
 //MODIFICAR
-router.put("/:id", async (req, res) => {
+router.put("/:id", filmsValidaciones, filmsValidationResult, async (req, res) => {
   try {
     const filmModificado = await Films.findByIdAndUpdate(
       req.params.id,
