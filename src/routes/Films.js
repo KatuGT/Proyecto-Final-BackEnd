@@ -1,10 +1,16 @@
 const router = require("express").Router();
 const Films = require("../models/Films");
 const ListaFilms = require("../models/ListasFilms");
-const verificacionToken = require("./Token");
+
+
+const {
+  filmsValidaciones,
+  filmsValidationResult,
+} = require("../Validaciones/filmsValidaciones");
+
 
 //CREAR
-router.post("/", async (req, res) => {
+router.post("/", filmsValidaciones, filmsValidationResult, async (req, res) => {
   const nuevoFilm = new Films(req.body);
   nuevoFilm.genero = nuevoFilm.genero.toLowerCase();
   try {

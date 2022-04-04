@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 
 const filmsSchema = mongoose.Schema({
-  codigo: { type: Number },
   nombre: { type: String },
   director: { type: String },
   protagonistas: { type: String },
